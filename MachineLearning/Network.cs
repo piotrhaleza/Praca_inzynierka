@@ -1,4 +1,5 @@
 ﻿using MachineLearingInterfaces;
+using MachineLearning.Biases;
 using MachineLearning.errors;
 using MachineLearning.Wages;
 using System;
@@ -44,16 +45,13 @@ namespace MachineLearning
 
             _batchSize = batchSize;
 
-            LearningRate = 0.05;
+            LearningRate = 0.02;
         }
         public Network(IInitWages initWages, IInitBiases initBiases, int batchSize)
         {
-            initWages?.Init(this);
-            initBiases?.Init(this);
-
             _batchSize = batchSize;
 
-            LearningRate = 0.05;
+            LearningRate = 0.02;
         }
         #endregion
 

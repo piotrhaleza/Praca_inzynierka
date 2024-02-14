@@ -4,7 +4,7 @@ using System.Windows.Shapes;
 
 namespace SnakeGame.UI.Entities
 {
-    class SnakeElement : GameEntity
+    public class SnakeElement : GameEntity
     {
         public SnakeElement(int size, bool isHead = false)
         {
@@ -12,25 +12,25 @@ namespace SnakeGame.UI.Entities
             {
                 Width = size - 4,
                 Height = size - 4,
-                Fill = isHead? Brushes.Yellow: Brushes.Green
+                Fill = isHead? Brushes.Blue : Brushes.Green
             };
             Size = size;
         }
-        public int Size { get; set; }
+      
+
+    
         public bool IsHead {
             
             get => isHead; 
             set
             {
                 isHead = value;
-                (UIElement as Rectangle).Fill = isHead ? Brushes.Yellow : Brushes.Green;
+                (UIElement as Rectangle).Fill = isHead ? Brushes.Blue : Brushes.Green;
             } 
         
         
         }
         private bool isHead;
-
-        public static int green = 255;
 
     }
 }

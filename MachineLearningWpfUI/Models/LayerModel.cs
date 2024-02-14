@@ -1,5 +1,6 @@
 ﻿using MachineLearingInterfaces;
 using MachineLearingInterfaces.ActivationFunc;
+using MachineLearning.Funcs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,36 +13,15 @@ namespace MachineLearningWpfUI.Models
 {
     public class LayerModel : INotifyPropertyChanged
     {
+        #region Private fileds
+        private int id;
+        private ActivationFuncEnum kindActivation;
+        private string pattern;
+        private string realPattern { get; set; }
+        #endregion
+
         #region Public Properties
-        public ActivationFuncEnum KindActivation
-        {
-            get
-            {
-                return kindActivation;
-            }
-            set
-            {
-                kindActivation = value;
 
-                switch (kindActivation)
-                {
-                    case ActivationFuncEnum.Sigmoid:
-                        Pattern = SigmoidActivationFunc.OrginalPattern; break;
-                    case ActivationFuncEnum.Lineral:
-                        Pattern = LineralActivationFunc.OrginalPattern; break;
-                    case ActivationFuncEnum.Tanh:
-                        Pattern = TanhActivationFunc.OrginalPattern; break;
-                    case ActivationFuncEnum.ReLu:
-                        Pattern = ReLuActivationFunc.OrginalPattern; break;
-                    case ActivationFuncEnum.SoftMax:
-                        Pattern = SoftmaxActivationFunc.OrginalPattern; break;
-                    default:
-                        break;
-                }
-
-                OnPropertyChanged();
-            }
-        }
         public int Id
         {
             get
@@ -55,8 +35,49 @@ namespace MachineLearningWpfUI.Models
                 OnPropertyChanged();
             }
         }
-        private int id { get; set; }
-        private ActivationFuncEnum kindActivation;
+        
+        public ActivationFuncEnum KindActivation
+        {
+            get
+            {
+                return kindActivation;
+            }
+            set
+            {
+                kindActivation = value;
+
+                switch (kindActivation)
+                {
+                    case ActivationFuncEnum.Sigmoid:
+                        Pattern = SigmoidActivationFunc.OrginalPattern;
+                        Parameters = SigmoidActivationFunc.OrginalParameters;
+                        break;
+                    case ActivationFuncEnum.Lineral:
+                        Pattern = LineralActivationFunc.OrginalPattern;
+                        Parameters = LineralActivationFunc.OrginalParameters; 
+                        break;
+                    case ActivationFuncEnum.Tanh:
+                        Pattern = TanhActivationFunc.OrginalPattern;
+                        Parameters = TanhActivationFunc.OrginalParameters;
+                        break;
+                    case ActivationFuncEnum.ReLu:
+                        Pattern = ReLuActivationFunc.OrginalPattern;
+                        Parameters = ReLuActivationFunc.OrginalParameters;
+                        break;
+                    case ActivationFuncEnum.SoftMax:
+                        Pattern = SoftmaxActivationFunc.OrginalPattern;
+                        Parameters = SoftmaxActivationFunc.OrginalParameters; 
+                        break;
+                    default:
+                        break;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public Dictionary<string,double> Parameters { get; set; }
+
         public string Pattern
         {
             get
@@ -70,7 +91,7 @@ namespace MachineLearningWpfUI.Models
                 OnPropertyChanged();
             }
         }
-        private string pattern { get; set; }
+       
         public string RealPattern
         {
             get
@@ -83,16 +104,20 @@ namespace MachineLearningWpfUI.Models
                 OnPropertyChanged();
             }
         }
-        private string realPattern { get; set; }
+       
         public bool Odd => Id % 2 == 0;
+
         public int NumberOfNeurons { get; set; }
         #endregion
+
+        #region Constructors
         public LayerModel(int id)
         {
             KindActivation = ActivationFuncEnum.Lineral;
             Id = id;
             NumberOfNeurons = 1;
         }
+
         public LayerModel(ILayer layer)
         {
             if (layer.ActivationFunc != null)
@@ -102,12 +127,16 @@ namespace MachineLearningWpfUI.Models
             Id = layer.Id;
             NumberOfNeurons = layer.NeuronList.Count;
         }
+        #endregion
 
+        #region Static Methods
         public static IEnumerable<LayerModel> Map(IList<ILayer> layers)
         {
             foreach (var layer in layers)
                 yield return new LayerModel(layer);
         }
+        #endregion
+
         #region PropertyChanged
         /// <summary>
         /// Zdarzenie obsługujące zmianę wartości właściwości (implementowane przez INotifyPropertyChanged).

@@ -8,6 +8,9 @@
         xmlns:enumwpf ="clr-namespace:MachineLearningWpfUI.Models.Enums"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:helpers="clr-namespace:Bukma.Helpers"
         xmlns:Helpers="clr-namespace:Bukma.Helpers"
+        xmlns:diag="http://mindfusion.eu/diagramming/wpf"  
+        xmlns:mfc="clr-namespace:MindFusion.UI.Wpf;assembly=MindFusion.Common.Wpf"
+       
         mc:Ignorable="d"
         Background="Transparent"
         ResizeMode="CanMinimize"
@@ -21,6 +24,7 @@
         </ObjectDataProvider>
         <Helpers:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </Window.Resources>
+
    
         <Grid>
             <Grid.ColumnDefinitions>
@@ -76,7 +80,6 @@
                 <SolidColorBrush x:Key="SubForegorundBrush" Color="{StaticResource SubForegroundColor}"/>
 
             </Grid.Resources>
-
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -84,7 +87,17 @@
 
                 </Grid.RowDefinitions>
                 <Grid  Background="Black">
-                    <Grid.ColumnDefinitions>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="290"/>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="150"/>
@@ -94,9 +107,106 @@
                     <TextBlock  Grid.Column="1" Text="Wzór" Foreground="White" FontWeight="DemiBold"   FontSize="17" Margin="0,18,0,0"/>
                     <TextBlock  Grid.Column="2" Text="Liczba neuronów" Foreground="White" FontWeight="DemiBold"   FontSize="17" Margin="0,18,0,0"/>
                 </Grid>
-                <ListBox Grid.Row="1" Background="#FF2B2B2B" x:Name="LayersWpf" HorizontalAlignment="Stretch" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ItemsSource="{Binding Layers, UpdateSourceTrigger=PropertyChanged}" 
+            <Grid  Background="Black" HorizontalAlignment="Center">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Visual}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Button  Background="Transparent" Margin="0,0,0,0" Padding="0" Width="40" Height="40"  BorderBrush="{x:Null}" Command="{Binding NetworkRandomCommand}" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Border" 
+                      BorderThickness="1"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}">
+                                            <ContentPresenter Margin="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Image HorizontalAlignment="Center">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\previous.png"/>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </Button>
+                <Slider Margin="20,00,0,0" Width="800" Foreground="#55aaff" Grid.Column="1" x:Name="valueSlider" Minimum="0" Maximum="100" Value="0" TickFrequency="1" IsSnapToTickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Grid.Column="2"  Background="Transparent" Margin="20,0,0,0" Padding="0" Width="40" Height="40"  BorderBrush="{x:Null}" Command="{Binding NetworkRandomCommand}" >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Border" 
+                      BorderThickness="1"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}">
+                                            <ContentPresenter Margin="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Image HorizontalAlignment="Center">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\next.png"/>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </Button>
+            </Grid>
+            <ScrollViewer Background="#FF2B2B2B" HorizontalAlignment="Stretch" Grid.Row="1" HorizontalScrollBarVisibility="Auto" Focusable="False">
+                <ScrollViewer.Style>
+                    <Style TargetType="ScrollViewer">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Visual}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>
+                <diag:Diagram Margin="0,-30,0,10"  Background="#FF2B2B2B" IsEnabled="false" Name="mfDiagram"  />
+            </ScrollViewer>
+            <ListBox Grid.Row="1" Background="#FF2B2B2B" x:Name="LayersWpf" HorizontalAlignment="Stretch" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ItemsSource="{Binding Layers, UpdateSourceTrigger=PropertyChanged}" 
          BorderThickness="0" Margin="-5,2,0,0" SelectionMode="Single"  >
-                    <ListBox.ItemTemplate>
+                <ListBox.Style>
+                    <Style TargetType="ListBox">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border x:Name="la" BorderThickness="0,0,0,0">
                                 <Border.Style>
@@ -131,7 +241,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                     <TextBox Text="{Binding NumberOfNeurons}" BorderBrush="#eeeeee" Grid.Column="2" PreviewTextInput="NumberValidationTextBox" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" MinWidth="50" Foreground="#eeeeee"></TextBox>
-                                    <Button Background="Transparent" Margin="0,0,0,0" Padding="6" Grid.Column="4"  Width="40"   Height="40" BorderBrush="{x:Null}" Command="{Binding Data.ClickCommand, Source={StaticResource proxy}}" >
+                                    <Button Background="Transparent" Margin="0,0,0,0" Padding="6" Grid.Column="4"  Width="40"   Height="40" BorderBrush="{x:Null}" CommandParameter="{Binding .}" Command="{Binding Data.ClickCommand, Source={StaticResource proxy}}" >
                                         <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\Properties.png"/>
                                     </Button>
                                 </Grid>
@@ -139,7 +249,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <!--<StackPanel Orientation="Horizontal"  Grid.Row="2">
+           
+           
+            <!--<StackPanel Orientation="Horizontal"  Grid.Row="2">
                 <StackPanel VerticalAlignment="Center">
                     <Ellipse Height="20" Width="20" Margin="10" Fill="White"/>
                     <Ellipse Height="20" Width="20" Margin="10"  Fill="White"/>
@@ -156,7 +268,7 @@
             </Grid>
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="70"  Background="Black">
 
-                <Button  Background="Transparent" Margin="-5,10,0,0" Padding="0" Width="40" Height="40" BorderBrush="{x:Null}" Command="{Binding MoveCommand}" >
+            <Button  Background="Transparent" Margin="-5,10,0,0" Padding="0" Width="40" Height="40" BorderBrush="{x:Null}" Command="{Binding NetworkBuildCommand}" >
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Template">
@@ -189,7 +301,7 @@
                         </Image.Style>
                     </Image>
                 </Button>
-                <Button  Background="Transparent" Margin="-5,20,0,0"  Padding="0" Width="40" Height="40"  BorderBrush="{x:Null}" Command="{Binding MoveCommand}" >
+            <Button  Background="Transparent" Margin="-5,20,0,0"  Padding="0" Width="40" Height="40"  BorderBrush="{x:Null}" Command="{Binding NetworkVisualCommand}" >
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Template">
@@ -214,7 +326,7 @@
                             <Style TargetType="Image">
                                 <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\networkBlue.png"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
+                                    <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Visual}">
                                         <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\networkPurple.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -246,11 +358,11 @@
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\startBlue.png"/>
-                                <Style.Triggers>
+                                <!--<Style.Triggers>
                                     <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
                                         <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\startPurple.png"/>
                                     </DataTrigger>
-                                </Style.Triggers>
+                                </Style.Triggers>-->
                             </Style>
                         </Image.Style>
                     </Image>
@@ -264,7 +376,7 @@
                                 <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\move_100.png"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CreatingMode}" Value="{x:Static enumwpf:CreatingMode.Moving}">
-                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\MoveModeOn.png"/>
+                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\MoveModeOn_100_673AB7.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -301,7 +413,7 @@
                     </Image>
                 </Button>
                 <Button Background="Transparent" Margin="0,10,0,0"  Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}" Command="{Binding SaveCommand}">
-                    <Image  Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\save_100.png">
+                    <Image  Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\save_100_55AAFF.png">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Opacity" Value="1"/>
@@ -315,7 +427,23 @@
                     </Image>
                 </Button>
             </StackPanel>
-
         </Grid>
-  
+        <!--<StackPanel Height="500" Orientation="Horizontal" Background="Red">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="False">
+                <diag:Diagram Background="Black" IsEnabled="False" Name="mfDiagram"  />
+                </ScrollViewer>
+                <mfc:ZoomControl
+			x:Name="zoomControl"
+            Target="{Binding ElementName=mfDiagram}"
+			ScrollStep="40"
+			MinZoomFactor="10"
+			Height="350"
+			VerticalAlignment="Top"
+			Width="50"
+			HorizontalAlignment="Right"
+			Panel.ZIndex="1"
+			Margin="0,30,30,0">
+                </mfc:ZoomControl>
+        </StackPanel>-->
+   
 </Window>

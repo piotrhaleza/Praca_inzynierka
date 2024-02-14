@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MachineLearningWpfUI.Models;
+using MachineLearningWpfUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +21,9 @@ namespace MachineLearningWpfUI.Views
     /// </summary>
     public partial class PropertiesWindow : Window
     {
-        public PropertiesWindow()
+        public PropertiesWindow(LayerModel model)
         {
+            DataContext = new PropertiesViewModel(model,this);
             InitializeComponent();
         }
     }

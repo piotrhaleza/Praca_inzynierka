@@ -2,6 +2,7 @@
 using MachineLearingInterfaces.ActivationFunc;
 using MachineLearning;
 using MachineLearning.Biases;
+using MachineLearning.Funcs;
 using MachineLearning.Wages;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace MachineLearningsUi
         {
             this.AutoScroll = true;
             Network = network;
-            funcs = new List<IActivationFunc>() { new LineralActivationFunc() , new SigmoidActivationFunc() };
+            funcs = new List<IActivationFunc>() { LineralActivationFunc.Create(),LineralActivationFunc.Create()};
             InitializeComponent();
             TestM2ethod1();
 
@@ -62,12 +63,12 @@ namespace MachineLearningsUi
 
             Network network;
 
-            var inputLayer = new Layer(1,1, funcs[0]);
-            var hiddenfirsLayer = new Layer(6,2, funcs[0]);
-            var hiddenfirsLayer2 = new Layer(6,3, funcs[1]);
+            var inputLayer = new Layer(1,1, LineralActivationFunc.Create());
+            var hiddenfirsLayer = new Layer(16,2, LineralActivationFunc.Create());
+         
             var output = new Layer(1,4);
         
-            network = new Network(new List<ILayer>() { inputLayer, hiddenfirsLayer2, hiddenfirsLayer, output }, new InitHeWages(), new InitZeroBiases(), 10);
+            network = new Network(new List<ILayer>() { inputLayer, hiddenfirsLayer, output }, new InitHeWages(), new InitZeroBiases(), 10);
 
             Random random = new Random(); // Inicjalizacja generatora liczb losowych
             int a;

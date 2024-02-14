@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivationStaticFuncs.cs" />
     <Compile Include="IActivationFunc.cs" />
     <Compile Include="IInitWages.cs" />
     <Compile Include="ILayer.cs" />

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SnakeGame.UI.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SnakeGame.UI.Entities
 {
-    class Snake
+    public class Snake
     {
         private readonly int _elementSize;
 
@@ -16,10 +17,12 @@ namespace SnakeGame.UI.Entities
 
         public SnakeElement TailBackup { get; set; }
         public List<SnakeElement> Elements { get; set; }
-        public List<SnakeElement> Body => Elements.Where(x=> !x.IsHead).ToList();
+        public List<SnakeElement> Body => Elements.Where(x => !x.IsHead).ToList();
+        public List<GameEntity> GameEntities => Elements.Where(x => !x.IsHead).OfType<GameEntity>().ToList();
         public MovementDirection MovementDirection { get; set; }
+
         public SnakeElement Head => Elements.Any() ? Elements[0] : null;
-     
+
 
         internal void UpdateMovementDirection(MovementDirection up)
         {
@@ -46,35 +49,28 @@ namespace SnakeGame.UI.Entities
 
         internal void Grow()
         {
-            if(Elements != null && TailBackup != null)
-            Elements.Add(new SnakeElement(_elementSize) { X = TailBackup.X, Y = TailBackup.Y});
+            if (Elements != null && TailBackup != null)
+                Elements.Add(new SnakeElement(_elementSize) { RealX = TailBackup.RealX, RealY = TailBackup.RealY });
         }
 
         public bool CollisionWithSelf()
         {
             SnakeElement snakeHead = Head;
             if (snakeHead != null)
-            {
                 foreach (var snakeElement in Elements)
-                {
                     if (!snakeElement.IsHead)
-                    {
-                        if (snakeElement.X == snakeHead.X && snakeElement.Y == snakeHead.Y)
-                        {
+                        if (snakeElement.RealX == snakeHead.RealX && snakeElement.RealY == snakeHead.RealY)
                             return true;
-                        }
-                    }
-                }
-            }
             return false;
         }
+        
 
         internal void PositionFirstElement(int cols, int rows, MovementDirection initialDirection)
         {
-            Elements.Add(new SnakeElement(_elementSize,true)
+            Elements.Add(new SnakeElement(_elementSize, true)
             {
-                X = cols * _elementSize,
-                Y = rows * _elementSize,
+                RealX = cols * _elementSize,
+                RealY = rows * _elementSize,
                 IsHead = true
             });
             MovementDirection = initialDirection;
@@ -87,27 +83,27 @@ namespace SnakeGame.UI.Entities
 
             TailBackup = new SnakeElement(_elementSize)
             {
-                X = tail.X,
-                Y = tail.Y
+                RealX = tail.RealX,
+                RealY = tail.RealY
             };
 
             head.IsHead = false;
             tail.IsHead = true;
-            tail.X = head.X;
-            tail.Y = head.Y;
+            tail.RealX = head.RealX;
+            tail.RealY = head.RealY;
             switch (MovementDirection)
             {
                 case MovementDirection.Right:
-                    tail.X += _elementSize;
+                    tail.RealX += _elementSize;
                     break;
                 case MovementDirection.Left:
-                    tail.X -= _elementSize;
+                    tail.RealX -= _elementSize;
                     break;
                 case MovementDirection.Up:
-                    tail.Y -= _elementSize;
+                    tail.RealY -= _elementSize;
                     break;
                 case MovementDirection.Down:
-                    tail.Y += _elementSize;
+                    tail.RealY += _elementSize;
                     break;
                 default:
                     break;
@@ -117,11 +113,5 @@ namespace SnakeGame.UI.Entities
         }
     }
 
-    enum MovementDirection
-    {
-        Left = 0,
-        Right = 1,
-        Up = 2,
-        Down = 3,
-    }
+
 }

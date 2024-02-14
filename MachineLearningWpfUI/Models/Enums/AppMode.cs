@@ -14,5 +14,6 @@ namespace MachineLearningWpfUI.Models.Enums
     public enum AppMode
     {
        Create,
+       Visual,
     }
 }

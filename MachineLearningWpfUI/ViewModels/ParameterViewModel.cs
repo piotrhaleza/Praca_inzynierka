@@ -128,11 +128,9 @@ namespace MachineLearningWpfUI.ViewModels
         {
             get
             {
-                return new Command(() =>
-                
-                
+                return new Command( e =>
                 {
-                    var propertiesWindow = new PropertiesWindow();
+                    var propertiesWindow = new PropertiesWindow(e as LayerModel);
 
                     // Ustaw okno właścicielskie
                     propertiesWindow.Owner = Application.Current.MainWindow;
@@ -141,7 +139,37 @@ namespace MachineLearningWpfUI.ViewModels
                     propertiesWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
                     // Pokaż okno
-                    propertiesWindow.ShowDialog();
+                    var a = propertiesWindow.ShowDialog();
+                });
+            }
+        }
+        public Command NetworkVisualCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    AppMode = AppMode.Visual;
+                });
+            }
+        }
+        public Command NetworkBuildCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    AppMode = AppMode.Create;
+                });
+            }
+        }
+        public Command NetworkRandomCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    Parent.RandomColors();
                 });
             }
         }

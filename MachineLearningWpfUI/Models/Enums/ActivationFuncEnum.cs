@@ -14,7 +14,6 @@ namespace MachineLearningWpfUI
         Tanh =2,
         ReLu =3,
         SoftMax = 4,
-        
     }
 
     public static class ActivationFuncMapper

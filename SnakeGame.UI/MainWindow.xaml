@@ -39,29 +39,8 @@
         </Grid>
         <GridSplitter Grid.Column="1" Width="7" Style="{StaticResource MaterialDesignGridSplitter}" ></GridSplitter>
         <md:DialogHost Grid.Column="0" x:Name="DialogHost">
-            <md:DialogHost.DialogContent>
-                <Grid Width="300" Height="200">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" FontSize="19">Gamesettings</Label>
-                    <Label Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" FontSize="19"></Label>
-                    <Label Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" FontSize="19">Difficulty</Label>
-                    <Slider Grid.Row="2" Grid.Column="1" Minimum="1" Maximum="10" Value="1" Margin="10" x:Name="DifficultySlider" ></Slider>
-                    <Label Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" FontSize="19">Elementsize</Label>
-                    <Slider Grid.Row="3" Grid.Column="1" Minimum="10" Maximum="40" Value="1" Margin="10" x:Name="ElementSizeSlider" ></Slider>
-                </Grid>
-            </md:DialogHost.DialogContent>
-            <md:Card Padding="32" Margin="16">
-                <Canvas x:Name="GameWorld" Margin="5"/>
+            <md:Card Width="500" Height="500" >
+                <Canvas  x:Name="GameWorld"/>
             </md:Card>
         </md:DialogHost>
     </Grid>

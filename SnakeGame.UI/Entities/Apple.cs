@@ -1,9 +1,10 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace SnakeGame.UI.Entities
 {
-    class Apple : GameEntity
+    public class Apple : GameEntity
     {
         public Apple(int size)
         {
@@ -15,13 +16,14 @@ namespace SnakeGame.UI.Entities
                 RadiusX = 10,
                 RadiusY = 10
             };
+            Size = size;
             UIElement = rect;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is Apple apple)
-                return X == apple.X && Y == apple.Y;
+                return RealX == apple.RealX && RealY == apple.RealY;
             else
                 return false;
         }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathParser.org-mXparser, Version=5.2.1.0, Culture=neutral, PublicKeyToken=0fbab7add73ed6e2, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathParser.org-mXparser.5.2.1\lib\net461\MathParser.org-mXparser.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +50,9 @@
     <Compile Include="Biases\InitXawierBiases.cs" />
     <Compile Include="Biases\InitZeroBiases.cs" />
     <Compile Include="Errors\Loss.cs" />
+    <Compile Include="Funcs\ActivationFuncs.cs" />
+    <Compile Include="Funcs\ActivationStaticFuncs.cs" />
+    <Compile Include="Funcs\Helpers\FuncCreator.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Network.cs" />
@@ -62,6 +68,9 @@
       <Project>{9FBD6F83-64F1-4384-86EA-9CA5AF5368D6}</Project>
       <Name>MachineLearingInterfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

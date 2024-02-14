@@ -21,10 +21,74 @@ Background="Transparent"
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Foreground="#eeeeee" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Text="f(x) = ax + b"/>
-            <Border HorizontalAlignment="Stretch" Margin="15,0,15,0" Height="3" Background="White" Grid.Row="1" CornerRadius="3"/>
-            <ToggleButton Width="50" Height="50" Margin="0,10,0,0" Grid.Row="2"/>
+            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Text="{Binding Pattern,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOrginal}" Value="true">
+                                <Setter Property="Foreground" Value="#a77Af7"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border HorizontalAlignment="Stretch" Margin="15,-15,15,0" Height="3"  Grid.Row="1" CornerRadius="3">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="White"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOrginal}" Value="true">
+                                <Setter Property="Background" Value="#a77Af7"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            <ToggleButton IsChecked="{Binding IsOrginal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="20" Height="20" Margin="0,10,0,0" Grid.Row="2"/>
+            <ItemsControl Margin="10"  Grid.Row="3" HorizontalAlignment="Stretch" ItemsSource="{Binding Parameters}" Padding="0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="la" BorderThickness="0,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#FF666666"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Odd}" Value="true">
+                                            <Setter Property="Background" Value="#444444"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Margin="0" BorderBrush="#88000000" BorderThickness="0,0,4,0" >
+                                    <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center" Foreground="White" FontSize="30"  Text="{Binding Key}" />
+                                </Border>
+                                <TextBox Grid.Column="1" Foreground="White" BorderBrush="White" FontSize="30" TextAlignment="Center"  Text="{Binding Value}" Margin="5"/>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Right">
+                <Button Background="Transparent" Grid.Row="4" Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding EndCommand}" >
+                    <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\accept.png"/>
+                </Button>
+                <Button Background="Transparent" Grid.Row="4" Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding EndCommand}" >
+                    <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\notaccept.png"/>
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 
