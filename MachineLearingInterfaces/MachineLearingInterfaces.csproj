@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IActivationFunc.cs" />
+    <Compile Include="ICopyNetwork.cs" />
+    <Compile Include="IInitBiases.cs" />
     <Compile Include="IInitWages.cs" />
     <Compile Include="ILayer.cs" />
     <Compile Include="INetwork.cs" />

@@ -20,7 +20,7 @@ namespace MachineLearingInterfaces.ActivationFunc
     {
         double Activate(double input);
 
-        double Pochodna(double input);
+        double Derivative(double input);
 
         Dictionary<string, double> Parameters { get; set; }
 
@@ -36,7 +36,7 @@ namespace MachineLearingInterfaces.ActivationFunc
 
         public abstract double Activate(double input);
 
-        public abstract double Pochodna(double input);
+        public abstract double Derivative(double input);
         
     }
 

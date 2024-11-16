@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Biases\IInitBiases.cs" />
     <Compile Include="Biases\InitHeBiases.cs" />
     <Compile Include="Biases\InitRandomBiases.cs" />
     <Compile Include="Biases\InitXawierBiases.cs" />
@@ -54,10 +53,12 @@
     <Compile Include="Funcs\ActivationStaticFuncs.cs" />
     <Compile Include="Funcs\Helpers\FuncCreator.cs" />
     <Compile Include="Layer.cs" />
+    <Compile Include="Networks\NormalNetwork.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestNetwork.cs" />
+    <Compile Include="Wages\Inits\InitHeWages - Copy.cs" />
     <Compile Include="Wages\Inits\InitHeWages.cs" />
     <Compile Include="Wages\Inits\InitRandomWages.cs" />
     <Compile Include="Wages\Inits\InitXawierWages.cs" />

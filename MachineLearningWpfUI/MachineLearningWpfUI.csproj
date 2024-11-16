@@ -127,7 +127,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BindingProxy.cs" />
-    <Compile Include="Models\ParameterModel.cs" />
+    <Compile Include="Resources\Models\ParameterModel.cs" />
     <Compile Include="ViewModels\PropertiesViewModel.cs" />
     <Compile Include="Views\PropertiesWindow.xaml.cs">
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
@@ -141,9 +141,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Base\Command.cs" />
-    <Compile Include="Models\Enums\ActivationFuncEnum.cs" />
-    <Compile Include="Models\Enums\AppMode.cs" />
-    <Compile Include="Models\LayerModel.cs" />
+    <Compile Include="Resources\Models\Enums\ActivationFuncEnum.cs" />
+    <Compile Include="Resources\Models\Enums\AppMode.cs" />
+    <Compile Include="Resources\Models\LayerModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ParameterViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">

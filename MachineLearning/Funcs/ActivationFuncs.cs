@@ -27,11 +27,10 @@ namespace MachineLearning.Funcs
             return (Parameters["m"]) / (Math.Exp(-input * Parameters["a"]) + Parameters["d"]) + Parameters["b"];
         }
 
-        public override double Pochodna(double input)
+        public override double Derivative(double input)
         {
             return Activate(input) * (1.0 - Activate(input));
         }
-
     }
 
     public partial class TanhActivationFunc : ActivationFunc
@@ -48,7 +47,7 @@ namespace MachineLearning.Funcs
             return Math.Tanh(input);
         }
 
-        public override double Pochodna(double input)
+        public override double Derivative(double input)
         {
             double coshValue = Math.Cosh(input);
             return 1.0 / (coshValue * coshValue);
@@ -71,7 +70,7 @@ namespace MachineLearning.Funcs
             return Math.Max(0, Parameters["a"] * input + Parameters["b"]);
         }
 
-        public override double Pochodna(double input)
+        public override double Derivative(double input)
         {
             if (input > 0)
                 return Parameters["a"];
@@ -96,7 +95,7 @@ namespace MachineLearning.Funcs
             return Parameters["a"] * input + Parameters["b"];
         }
 
-        public override double Pochodna(double input)
+        public override double Derivative(double input)
         {
             return Parameters["a"];
         }
@@ -112,7 +111,7 @@ namespace MachineLearning.Funcs
             return 1.0 / (1.0 + Math.Exp(-input));
         }
 
-        public override double Pochodna(double input)
+        public override double Derivative(double input)
         {
             throw new NotImplementedException();
         }

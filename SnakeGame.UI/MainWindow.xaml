@@ -2,6 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:enums="clr-namespace:SnakeGame.UI.Enums"
+         xmlns:my="clr-namespace:SnakeGame.UI.Converters"
         TextElement.FontWeight="Regular"
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
@@ -11,6 +13,19 @@
         Title="Super Snakinator" Height="700" Width="1100" KeyUp="Window_KeyUp"
         ResizeMode="CanMinimize"
         >
+    <Window.Resources>
+        <my:EnumToBoolConverter x:Key="filterTypeConverter" />
+        <Style x:Key="CustomTabItemStyle" TargetType="TabItem" BasedOn="{StaticResource MaterialDesignHeaderedContentControl}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFC107"/>
+                    <!-- Kolor podświetlenia np. bursztynowy -->
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -21,27 +36,160 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Button Width="100" Grid.Row="0" Margin="5" Content="Start" x:Name="StartBtn" Click="StartClick"/>
-            <Button Width="100" Grid.Row="1" Margin="5" Content="Restart" x:Name="RestartBtn" Click="RestartClick"/>
-            <Button Width="100" Grid.Row="2" Margin="5" Content="Options" Click="OptionsClick"/>
-            <GridSplitter Style="{StaticResource MaterialDesignGridSplitter}" Height="5" Grid.Row="3" Width="100" HorizontalAlignment="Center" Margin="0,20"></GridSplitter>
-            <Label Style="{StaticResource MaterialDesignLabel}" x:Name="LevelLbl" FontSize="19" Grid.Row="4" HorizontalAlignment="Left">Level: 1</Label>
-            <Label Style="{StaticResource MaterialDesignLabel}" x:Name="ScoreLbl" FontSize="19" Grid.Row="5" HorizontalAlignment="Left">Score: 1</Label>
-            <Label Style="{StaticResource MaterialDesignLabel}" x:Name="ApplesLbl" FontSize="19" Grid.Row="6" HorizontalAlignment="Left">Apples: 1</Label>
-            <GridSplitter Style="{StaticResource MaterialDesignGridSplitter}" Height="5" Grid.Row="7" Width="100" HorizontalAlignment="Center" Margin="0,20"></GridSplitter>
+            <Button Width="100" Grid.Row="1" Margin="5" Content="Opcje" x:Name="OptionsBtn" Click="OptionsClick"/>
+            <Button Width="100" Grid.Row="2" Margin="5" Content="Trening" x:Name="TrainingBtn" Click="StartTrainingClick"/>
+            <Button Width="100" Grid.Row="3" Margin="5" Content="Stop" x:Name="StopBtn" Click="StopClick"/>
+            <Slider Margin="5,0,5,0" Grid.Column="1" Grid.Row="5" Minimum="1" Maximum="10" Value="{Binding TickOfSpeed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="30" />
+
         </Grid>
         <GridSplitter Grid.Column="1" Width="7" Style="{StaticResource MaterialDesignGridSplitter}" ></GridSplitter>
         <md:DialogHost Grid.Column="0" x:Name="DialogHost">
             <md:Card Width="500" Height="500" >
-                <Canvas  x:Name="GameWorld"/>
+                <Canvas x:Name="GameWorld"/>
             </md:Card>
         </md:DialogHost>
+        <md:DialogHost Grid.Column="0" x:Name="TrainingGameHost" Visibility="Collapsed">
+            
+            <Border Padding="20" Background="White" CornerRadius="50" Width="600" Height="400" >
+                <StackPanel>
+                   
+
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Ścieżka do zapisu wag</Label>
+                        <TextBox Text="{Binding PathToFile}" x:Name="PathToFile" Width="200" Margin="10,0,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                        <Button Click="BtnFileOpen_Click" Height="10" Width="10" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                            <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Tryb</Label>
+                            <RadioButton IsChecked="{Binding IsGentics}"  Margin="10,0,0,0" GroupName="mode"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignAccentRadioButton}">Genteyczny</RadioButton>
+                            <RadioButton IsChecked="{Binding IsPropagation}" Margin="10,0,0,0" GroupName="mode" VerticalAlignment="Center"   Style="{StaticResource MaterialDesignAccentRadioButton}">Wsteczna Propagacja</RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="100" HorizontalAlignment="Right" Margin="0,20,20,20" Content="Anuluj"  Click="StopTrainingClick"/>
+                        <Button Width="100" HorizontalAlignment="Right" Margin="0,20,20,20" Content="Rozpocznij"  Click="StartTraingRealClick"/>
+                    </StackPanel>
+                   
+                    <ProgressBar Height="40" Style="{StaticResource MaterialDesignLinearProgressBar}" Minimum="0" Maximum="{Binding MaxRepeat,Mode=TwoWay}" Value="{Binding Iteration}" />
+                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Text="{Binding IterationText,UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Text="{Binding TheBestSnakeText,UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Border>
+        </md:DialogHost>
+        <md:DialogHost Grid.Column="0" x:Name="OptionsHost" Visibility="Collapsed">
+            <Border Padding="20" Background="White" CornerRadius="50" Width="600" Height="400" >
+                <StackPanel>
+                    <TabControl Height="310">
+                        <TabItem Width="120"  Header="Sieć">
+                            <StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Liczba warstw</Label>
+                                    <TextBox Text="{Binding CountOfLayers}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged" PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+
+                                </StackPanel>
+
+
+                                <ScrollViewer Margin="0,5,0,0"  Height="150" Style="{StaticResource MaterialDesignScrollViewer}" >
+                                    <ListBox ItemsSource="{Binding Layers,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignCardsListBox}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,2" Background="#fafafa" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="100" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Name}" />
+                                                    <TextBox Grid.Column="1" Text="{Binding CountOfNeurons}" HorizontalContentAlignment="Center" Margin="0,0,10,0" PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </ScrollViewer>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Funkcja aktywacji</Label>
+                                    <ComboBox Margin="20,0,0,0" Width="100" Style="{StaticResource MaterialDesignComboBox}" ItemsSource="{Binding PossibleActivationFunc}" SelectedItem="{Binding ActivationFunc}"></ComboBox>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </TabItem>
+                        <TabItem BorderThickness="0" Width="120" Header="Genetyczne">
+                            <StackPanel Margin="10" Orientation="Vertical">
+
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Ilość populacji</Label>
+                                    <TextBox Text="{Binding CountOfPopulations}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">liczebność populacji</Label>
+                                    <TextBox Text="{Binding CountOfPeopleInPoulation}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Ilość cykli</Label>
+                                    <TextBox Text="{Binding CountOfRepeat}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center"  PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Prawdopodobieństwo krzyżowania w %</Label>
+                                    <TextBox Text="{Binding PropablityOfCross}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center"  PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Prawdopodobieństwo mutacji w %</Label>
+                                    <TextBox Text="{Binding PropablityOfMutaion}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center"  PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Width="120"  Header="Propagacja">
+
+                            <StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Ilość wykonanych gier</Label>
+                                    <TextBox Text="{Binding IterationOfPropagation}" Width="50" Margin="10,0,0,0" HorizontalContentAlignment="Center"  PreviewTextInput="NumberValidationTextBox"  VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Width="120"  Header="Poziom trudności">
+
+                            <StackPanel>
+                                <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                                    <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Poziom trudnosci</Label>
+                                    <ComboBox SelectedValue="{Binding SelectedDifficulty, Mode=TwoWay}"  ItemsSource="{Binding PossibleDifficulty}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+
+                    <Button Width="200" HorizontalAlignment="Right" Margin="0,20,20,20" Content="Zapisz zmiany"  Click="SaveClick"/>
+                </StackPanel>
+            </Border>
+        </md:DialogHost>
+        <md:DialogHost Grid.Column="0" x:Name="StartGameHost" Visibility="Collapsed" >
+            <Border Padding="20" Background="White" CornerRadius="50" Width="600" Height="400" >
+                <StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Ścieżka do wczytania wag</Label>
+                        <TextBox x:Name="FileToRead" Text="{Binding PathToReadFile}"  Width="200" Margin="10,0,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Center"  Style="{StaticResource MaterialDesignTextBox}"/>
+                        <Button Click="BtnReadLoadWages_Click" Height="10" Width="10" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0"  Orientation="Horizontal">
+                        <Label Style="{StaticResource MaterialDesignLabel}" VerticalAlignment="Center"  FontSize="19" Grid.Row="0" HorizontalAlignment="Left">Poziom trudności</Label>
+                        <ComboBox Margin="30,0,0,0" SelectedValue="{Binding SelectedDifficulty, Mode=TwoWay}"  ItemsSource="{Binding PossibleDifficulty}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,220,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                        <Button Margin="10" Width="100"  Content="Anuluj"  Click="CancelGameClick"/>
+                        <Button Margin="10"  Width="100" Content="Zacznij gre" Click="StartGameClick"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+        </md:DialogHost>
+
     </Grid>
 </Window>

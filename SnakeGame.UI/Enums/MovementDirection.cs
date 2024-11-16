@@ -13,5 +13,11 @@ namespace SnakeGame.UI.Enums
         Up = 2,
         Down = 3,
         Forward = 4,
+        
+        LeftBack = 6,
+        LeftForward= 7,
+
+        RightBack = 8,
+        RightForward = 9,
     }
 }

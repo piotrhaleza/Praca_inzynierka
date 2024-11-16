@@ -68,7 +68,7 @@ namespace MachineLearningsUi
          
             var output = new Layer(1,4);
         
-            network = new Network(new List<ILayer>() { inputLayer, hiddenfirsLayer, output }, new InitHeWages(), new InitZeroBiases(), 10);
+            network = new Network(new List<ILayer>() { inputLayer, hiddenfirsLayer, output }, new InitHeWages(), new InitZeroBiases());
 
             Random random = new Random(); // Inicjalizacja generatora liczb losowych
             int a;

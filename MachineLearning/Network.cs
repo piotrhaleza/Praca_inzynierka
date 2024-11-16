@@ -13,49 +13,73 @@ using System.Threading.Tasks;
 
 namespace MachineLearning
 {
+    public class Network2 : Network
+    {
+        public Network2(IList<ILayer> layers, IInitWages initWages, IInitBiases initBiases, int batchSize) : base(layers, new InitHeWages(), new InitRandomBiases(), batchSize)
+        {
+        }
+    }
+
     public class Network : INetwork
     {
         #region Readonly Properties
         public readonly int _batchSize;
         public readonly IList<ILayer> _layers;
+        private readonly IInitWages _initWages;
+        private readonly IInitBiases _initBiases;
         #endregion
 
         #region Public Properties
+        public  IInitWages InitWages => _initWages;
+        public  IInitBiases InitBiases => _initBiases;
         public ILayer Inputs => Layers.FirstOrDefault();
-
         public ILayer Outputs => Layers.LastOrDefault();
-
         public IList<ILayer> Layers => _layers;
-
         public int BatchSize => _batchSize;
-
         public double Loss { get; set; }
-
         public double LearningRate { get; set; }
         #endregion
 
         #region Constructors
 
-        public Network(IList<ILayer> layers, IInitWages initWages, IInitBiases initBiases, int batchSize)
+        public Network(IList<ILayer> layers, IInitWages initWages, IInitBiases initBiases)
         {
             _layers = PrepareLayers(layers);
+
+            _initWages = initWages;
+            _initBiases = initBiases;
 
             initWages?.Init(this);
             initBiases?.Init(this);
 
-            _batchSize = batchSize;
-
-            LearningRate = 0.02;
+            LearningRate = 0.06;
         }
         public Network(IInitWages initWages, IInitBiases initBiases, int batchSize)
         {
             _batchSize = batchSize;
 
-            LearningRate = 0.02;
+            LearningRate = 0.1;
         }
         #endregion
 
         #region Public Methods
+        public void SetWages(IList<double> wages)
+        {
+            int i = 0;
+
+            foreach (var item in Layers)
+                foreach (var dict in item.Wages)
+                    foreach (var wage in dict)
+                        wage.Value.Value = wages[i++];
+                    
+        }
+        public IEnumerable<double> GetWages()
+        {
+            foreach (var item in Layers)
+                foreach (var dict in item.Wages)
+                    foreach (var wage in dict)
+                        yield return wage.Value.Value;
+        }
 
         public IList<ILayer> PrepareLayers(IList<ILayer> layers)
         {
@@ -70,10 +94,8 @@ namespace MachineLearning
             return layers;
         }
 
-        public bool ForwardPropagation(IList<double> inputs, IList<double> expected)
+        public IList<double> ForwardPropagation(IList<double> inputs)
         {
-            //tutaj dodaj warunki i logi
-
             for (int i = 0; i < inputs.Count(); i++)
                 Inputs.NeuronList[i].Value = inputs[i];
 
@@ -81,9 +103,7 @@ namespace MachineLearning
                 foreach (var neuron in layer.NeuronList)
                     layer.CalculateNextNeuron(neuron);
 
-            Loss = MachineLearning.errors.Loss.SquareLoss(Outputs.NeuronValues.ToArray(), expected);
-
-            return true;
+            return Outputs.NeuronValues.ToList();
         }
         public bool BackPropagation(IList<double> expected)
         {
@@ -92,20 +112,27 @@ namespace MachineLearning
             foreach (var layer in Layers.Reverse().Skip(1))
                 BackPropagationHiddenLayer(layer);
 
-            UpdateWages();
             return true;
         }
         public IList<double> TrainModel(IList<double> inputs, IList<double> expected)
         {
-            ForwardPropagation(inputs, expected);
+            ForwardPropagation(inputs);
             BackPropagation(expected);
             return Outputs.NeuronValues.ToList();
         }
 
         public IList<double> GetResults(IList<double> inputs, IList<double> expected)
         {
-            ForwardPropagation(inputs, expected);
+            ForwardPropagation(inputs);
             return Outputs.NeuronValues.ToList();
+        }
+
+        public int GetCountOfWages()
+        {
+            int result = 0;
+            for(int i =0; i<this.Layers.Count() -1;i++)
+                result += Layers[i].NeuronList.Count() * Layers[i + 1].NeuronList.Count();
+            return result;
         }
         #endregion
 
@@ -115,7 +142,7 @@ namespace MachineLearning
             List<double> sum = new List<double>();
 
             foreach (var neuron_wages in dicts)
-                sum.Add(neuron_wages.Sum(x => x.Value.Error * x.Value.Value));
+                sum.Add(neuron_wages.Sum(x => x.Value.Error));
 
             return sum;
         }
@@ -125,36 +152,36 @@ namespace MachineLearning
             if (layer.PreviousLayer == null)
                 return;
 
-            var listOfSumsGradients = GetSumOfGradtients(layer.Wages);
+            var errors = GetSumOfGradtients(layer.Wages);
 
             foreach (var neuron in layer.NeuronList)
             {
-                foreach (var wage in layer.PreviousLayer.NeuronList.Select(x => (x, x.Wages[neuron])))
+                foreach ((INeuron neuron, IWage wage) pair in layer.PreviousLayer.NeuronList.Select(x => (x , x.Wages[neuron])))
                 {
-                    wage.Item2.Gradient = listOfSumsGradients[neuron.Id] * layer.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue) * wage.x.Value;
-                    wage.Item2.Error = listOfSumsGradients[neuron.Id] * layer.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue);
+                    pair.wage.Gradient = errors[neuron.Id] * layer.PreviousLayer.ActivationFunc.Derivative(neuron.Value) * pair.neuron.Value;
+                    pair.wage.Error = errors[neuron.Id] * layer.PreviousLayer.ActivationFunc.Derivative(neuron.Value) * pair.wage.Value;
                 }
-                layer.PreviousLayer.GradientBiasa += listOfSumsGradients[neuron.Id] * layer.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue);
+                layer.PreviousLayer.GradientBiasa += errors[neuron.Id] * layer.PreviousLayer.ActivationFunc.Derivative(neuron.Value);
             }
             layer.PreviousLayer.GradientBiasa /= layer.NeuronList.Count();
         }
         private void BackPropagationOutputs(IList<double> expected)
         {
-            foreach (var neuron in Outputs.NeuronList)
+            foreach (var neuron in Outputs.NeuronList)  
             {
                 foreach (var previousNeuron in Outputs.PreviousLayer.NeuronList)
                 {
                     var wage = previousNeuron.Wages[neuron];
 
-                    wage.Gradient = (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue) * previousNeuron.Value;
-                    wage.Error = (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue);
+                    wage.Gradient = (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Derivative(neuron.Value) * previousNeuron.Value;
+                    wage.Error = (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Derivative(neuron.Value) * wage.Value;
                 }
-                Outputs.PreviousLayer.GradientBiasa += (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Pochodna(neuron.DerivativeValue);
+                Outputs.PreviousLayer.GradientBiasa += (neuron.Value - expected[neuron.Id]) * Outputs.PreviousLayer.ActivationFunc.Derivative(neuron.Value);
             }
             Outputs.PreviousLayer.GradientBiasa /= Outputs.NeuronList.Count;
         }
 
-        private void UpdateWages()
+        public void UpdateWages()
         {
             foreach (var layer in Layers)
             {
@@ -162,7 +189,7 @@ namespace MachineLearning
                     foreach (var wage in item.Wages.Select(x => x.Value))
                         wage.Value = wage.Value - LearningRate * wage.Gradient;
 
-                layer.Bias = layer.Bias - LearningRate * layer.GradientBiasa;
+                //layer.Bias = layer.Bias - 0.01 *LearningRate * layer.GradientBiasa;
                 layer.GradientBiasa = 0;
             }
         }

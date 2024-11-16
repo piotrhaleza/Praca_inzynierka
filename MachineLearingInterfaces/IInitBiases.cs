@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MachineLearning
+namespace MachineLearingInterfaces
 {
     public interface IInitBiases
     {
-        void Init(Network network);
+        void Init(INetwork network);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MachineLearingInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace MachineLearning.Biases
 {
     public class InitZeroBiases : IInitBiases
     {
-        public void Init(Network network)
+        public void Init(INetwork network)
         {
             foreach (var item in network.Layers)
                 item.Bias = 0;

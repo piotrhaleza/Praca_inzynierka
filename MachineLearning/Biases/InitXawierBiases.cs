@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MachineLearning.Biases
 {
-    public class InitXawierBiases : IInitWages
+    public class InitXawierBiases : IInitBiases
     {
         public void Init(INetwork network)
         {

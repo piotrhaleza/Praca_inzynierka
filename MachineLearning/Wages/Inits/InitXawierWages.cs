@@ -20,8 +20,14 @@ namespace MachineLearning.Wages
 
                 foreach (var item in firstLayer.NeuronList)
                     foreach (var secondItem in secondLayer.NeuronList)
-                        item.Wages.Add(secondItem, new Wage() { Value= random.NextDouble() * Math.Sqrt(2.0 / (network.Inputs.Size + network.Outputs.Size)) });
+                        item.Wages.Add(secondItem, new Wage() { Value= (random.NextDouble()*2 - 1) * Math.Sqrt(2.0 / (network.Inputs.Size + network.Outputs.Size)) });
             }
+        }
+        public static double GetRandomWage(int inputs, int outputs)
+        {
+            var random = new Random();
+
+            return (random.NextDouble() - 1) * Math.Sqrt(2.0 / (inputs + outputs));
         }
     }
 }

@@ -6,29 +6,34 @@ namespace SnakeGame.UI.Entities
 {
     public class SnakeElement : GameEntity
     {
+        public static bool UiIs = true;
+
         public SnakeElement(int size, bool isHead = false)
         {
-            UIElement = new Rectangle
-            {
-                Width = size - 4,
-                Height = size - 4,
-                Fill = isHead? Brushes.Blue : Brushes.Green
-            };
+            if (UiIs)
+                UIElement = new Rectangle
+                {
+                    Width = size - 4,
+                    Height = size - 4,
+                    Fill = isHead ? new SolidColorBrush(Color.FromArgb(255, 122, 0, 255)) :  new SolidColorBrush(Color.FromArgb(255, 142, 145, 255))
+                };
             Size = size;
         }
-      
 
-    
-        public bool IsHead {
-            
-            get => isHead; 
+
+
+        public bool IsHead
+        {
+
+            get => isHead;
             set
             {
                 isHead = value;
-                (UIElement as Rectangle).Fill = isHead ? Brushes.Blue : Brushes.Green;
-            } 
-        
-        
+                if (UiIs)
+                    (UIElement as Rectangle).Fill = isHead ? new SolidColorBrush(Color.FromArgb(255, 122, 0, 255)) : new SolidColorBrush(Color.FromArgb(255, 142, 145, 255));
+            }
+
+
         }
         private bool isHead;
 

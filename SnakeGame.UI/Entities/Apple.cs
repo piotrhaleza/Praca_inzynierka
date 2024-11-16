@@ -8,16 +8,20 @@ namespace SnakeGame.UI.Entities
     {
         public Apple(int size)
         {
-            Rectangle rect = new Rectangle
+            if (SnakeElement.UiIs)
             {
-                Width = size - 4,
-                Height = size - 4,
-                Fill = Brushes.Red ,
-                RadiusX = 10,
-                RadiusY = 10
-            };
+                Rectangle rect = new Rectangle
+                {
+                    Width = size - 4,
+                    Height = size - 4,
+                    Fill = Brushes.Red,
+                    RadiusX = 10,
+                    RadiusY = 10
+                };
+                UIElement = rect;
+            }
             Size = size;
-            UIElement = rect;
+                
         }
 
         public override bool Equals(object obj)

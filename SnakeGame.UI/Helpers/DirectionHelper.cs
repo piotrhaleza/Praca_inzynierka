@@ -12,40 +12,54 @@ namespace SnakeGame.UI.Helpers
     {
         public static MovementDirection GetDirect(IList<double> output, MovementDirection direct)
         {
+            Random random = new Random();
             var result = new List<double>();
+            var bests = new List<int>(); ;
+            int bestIndex = -1;
+            for (int i = 0; i < output.Count; i++)
+                if (output.Max() == output[i])
+                    bests.Add(i);
+
+            if(bests.Count()>1)
+                bestIndex =random.Next(0, bests.Count());
+            else
+                bestIndex = bests.FirstOrDefault();
+
+            if (output.All(x => x == 0))
+                bestIndex = 1;
 
             switch (direct)
             {
                 case MovementDirection.Left:
-                    if (output[0] == output.Max())
+                    if (0 == bestIndex)
                         return MovementDirection.Down;
-                    if (output[1] == output.Max())
+                    if (1 == bestIndex)
                         return MovementDirection.Left;
-                    if (output[2] == output.Max())
+                    if (2 == bestIndex)
                         return MovementDirection.Up;
                     break;
                 case MovementDirection.Right:
-                    if (output[0] == output.Max())
+                    if (0 == bestIndex)
                         return MovementDirection.Up;
-                    if (output[1] == output.Max())
+                    if (1 == bestIndex)
                         return MovementDirection.Right;
-                    if (output[2] == output.Max())
+                    if (2 == bestIndex)
                         return MovementDirection.Down;
                     break;
                 case MovementDirection.Up:
-                    if (output[0] == output.Max())
+                    if (0 == bestIndex)
                         return MovementDirection.Left;
-                    if (output[1] == output.Max())
+                    if (1 == bestIndex)
                         return MovementDirection.Up;
-                    if (output[2] == output.Max())
+                    if (2 == bestIndex)
                         return MovementDirection.Right;
                     break;
                 case MovementDirection.Down:
-                    if (output[0] == output.Max())
+                    if (0 == bestIndex)
                         return MovementDirection.Right;
-                    if (output[1] == output.Max())
+                    if (1 == bestIndex)
                         return MovementDirection.Down;
-                    if (output[2] == output.Max())
+                    if (2 == bestIndex)
                         return MovementDirection.Left;
                     break;
 

@@ -146,7 +146,7 @@
                     <Image HorizontalAlignment="Center">
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\previous.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\previous.png"/>
                             </Style>
                         </Image.Style>
                     </Image>
@@ -175,7 +175,7 @@
                     <Image HorizontalAlignment="Center">
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\next.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\next.png"/>
                             </Style>
                         </Image.Style>
                     </Image>
@@ -242,7 +242,7 @@
                                     </TextBlock>
                                     <TextBox Text="{Binding NumberOfNeurons}" BorderBrush="#eeeeee" Grid.Column="2" PreviewTextInput="NumberValidationTextBox" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" MinWidth="50" Foreground="#eeeeee"></TextBox>
                                     <Button Background="Transparent" Margin="0,0,0,0" Padding="6" Grid.Column="4"  Width="40"   Height="40" BorderBrush="{x:Null}" CommandParameter="{Binding .}" Command="{Binding Data.ClickCommand, Source={StaticResource proxy}}" >
-                                        <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\Properties.png"/>
+                                        <Image Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\Properties.png"/>
                                     </Button>
                                 </Grid>
                             </Border>
@@ -291,10 +291,10 @@
                     <Image HorizontalAlignment="Center">
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\CreateBlue.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\CreateBlue.png"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
-                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\createViolent.png"/>
+                                        <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\createViolent.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -324,10 +324,10 @@
                     <Image HorizontalAlignment="Center">
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\networkBlue.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\networkBlue.png"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Visual}">
-                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\networkPurple.png"/>
+                                        <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\networkPurple.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -357,10 +357,10 @@
                     <Image HorizontalAlignment="Center">
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\startBlue.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\startBlue.png"/>
                                 <!--<Style.Triggers>
                                     <DataTrigger Binding="{Binding AppMode}" Value="{x:Static enumwpf:AppMode.Create}">
-                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\startPurple.png"/>
+                                        <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\startPurple.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>-->
                             </Style>
@@ -373,10 +373,10 @@
                     <Image>
                         <Image.Style>
                             <Style TargetType="Image">
-                                <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\move_100.png"/>
+                                <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\move_100.png"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CreatingMode}" Value="{x:Static enumwpf:CreatingMode.Moving}">
-                                        <Setter Property="Source" Value="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\MoveModeOn_100_673AB7.png"/>
+                                        <Setter Property="Source" Value="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\MoveModeOn_100_673AB7.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -384,7 +384,7 @@
                     </Image>
                 </Button>
                 <Button Background="Transparent" Margin="0,10,0,0"  Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding AddCommand}">
-                    <Image   Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\add.png">
+                    <Image   Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\add.png">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Opacity" Value="1"/>
@@ -399,7 +399,7 @@
                 </Button>
                 <Button Background="Transparent" Margin="0,10,0,0"  Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding DeleteCommand}" >
 
-                    <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\minus_100.png">
+                    <Image Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\minus_100.png">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Opacity" Value="1"/>
@@ -413,7 +413,7 @@
                     </Image>
                 </Button>
                 <Button Background="Transparent" Margin="0,10,0,0"  Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}" Command="{Binding SaveCommand}">
-                    <Image  Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\save_100_55AAFF.png">
+                    <Image  Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\save_100_55AAFF.png">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Opacity" Value="1"/>

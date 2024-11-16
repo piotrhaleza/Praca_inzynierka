@@ -83,10 +83,10 @@ Background="Transparent"
             </ItemsControl>
             <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Right">
                 <Button Background="Transparent" Grid.Row="4" Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding EndCommand}" >
-                    <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\accept.png"/>
+                    <Image Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\accept.png"/>
                 </Button>
                 <Button Background="Transparent" Grid.Row="4" Padding="6" Width="40"   Height="40"  BorderBrush="{x:Null}"  Command="{Binding EndCommand}" >
-                    <Image Source="C:\Users\piotr\source\repos\SnakeGame\MachineLearningWpfUI\Resources\notaccept.png"/>
+                    <Image Source="D:\progaming\SnakeGame\MachineLearningWpfUI\Resources\notaccept.png"/>
                 </Button>
             </StackPanel>
         </Grid>

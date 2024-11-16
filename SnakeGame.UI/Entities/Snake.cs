@@ -14,6 +14,19 @@ namespace SnakeGame.UI.Entities
             Elements = new List<SnakeElement>();
             _elementSize = elementSize;
         }
+        public Snake(Snake copy)
+        {
+            Elements = new List<SnakeElement>();
+            MovementDirection = copy.MovementDirection;
+            foreach (var item in copy.Elements)
+                Elements.Add(new SnakeElement(item.Size) { RealX = item.RealX, RealY = item.RealY });
+            TailBackup= copy.TailBackup;
+            _elementSize = copy._elementSize;
+        }
+        public  Snake Copy()
+        {
+            return new Snake(this);
+        }
 
         public SnakeElement TailBackup { get; set; }
         public List<SnakeElement> Elements { get; set; }
@@ -22,7 +35,8 @@ namespace SnakeGame.UI.Entities
         public MovementDirection MovementDirection { get; set; }
 
         public SnakeElement Head => Elements.Any() ? Elements[0] : null;
-
+        public int X => Head.X;
+        public int Y => Head.Y;
 
         internal void UpdateMovementDirection(MovementDirection up)
         {
