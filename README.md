@@ -1,4 +1,4 @@
-Stowrzenie apki na prace inżynierską. Aplikacja umożliwia konfiguracje treningu sztucznych sieci neuronowych, ich trening oraz testowanie.
+Aplikacja w celach uzyskania dyplomu inżyniera. Aplikacja umożliwia konfiguracje treningu sztucznych sieci neuronowych, ich trening oraz testowanie.
 
 
 Przykład działania gra Snake:
