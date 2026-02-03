@@ -3,4 +3,9 @@ Aplikacja w celach uzyskania dyplomu inżyniera. Aplikacja umożliwia konfigurac
 
 Przykład działania gra Snake:
 
-![2024-01-22_11h41_35-ezgif com-video-to-gif-converter](https://github.com/piotrhaleza/NeuralNetworkBuilder/assets/110109614/fa1c223b-c49b-4731-b951-a3179f822724)
+[Porownanie-Skutecznosci-Metod_Poprawione.pdf](https://github.com/user-attachments/files/25052753/Porownanie-Skutecznosci-Metod_Poprawione.pdf)
+
+
+
+https://github.com/user-attachments/assets/6127a923-626d-4677-829e-0315d03a1d39
+
