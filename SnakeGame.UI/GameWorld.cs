@@ -42,7 +42,6 @@ namespace SnakeGame.UI
     {
 
         private MainWindow parent;
-
         public static int ElementSize { get; set; } = 50;
         public static int ColumnCount { get; set; }
         public static int RowCount { get; set; }
@@ -58,6 +57,8 @@ namespace SnakeGame.UI
         SnakeGeneticPopulation population { get; set; }
         ICopyNetwork initialzeNetwork { get; set; }
         GameDifficulty Difficulty { get; set; }
+        int TestingGame { get; set; }
+        int CounterTestingGame { get; set; }
         #region Constructors
         public GameWorld(MainWindow mainWindow)
         {
@@ -68,15 +69,19 @@ namespace SnakeGame.UI
 
         #region Initialize
 
-        public async Task InitializeGame(GameDifficulty difficulty)
+        public async Task InitializeGame(GameDifficulty difficulty,int testingGame)
         {
+            CounterTestingGame = 0;
+            parent.ViewModel.Results = new List<int>();
+            parent.ViewModel.CollisionsResult = new List<KindOfCollision>();
             InitializeArea();
-            DrawGameWorld();
             InitializeSnake();
             InitializeApple();
             InitializeTimer();
+            DrawGameWorld();
             IsRunning = true;
             Difficulty = difficulty;
+            TestingGame = testingGame;
         }
         public void Stop()
         {
@@ -84,11 +89,10 @@ namespace SnakeGame.UI
             if (_gameLoopTimer != null)
                 _gameLoopTimer.Stop();
         }
-        public void InitlizeGenticsNetwork(string path)
+        public void InitlizeNetwork(string path)
         {
             Network = JsonNetworkReader.ReadNetwork(path);
             SnakeElement.UiIs = true;
-          
         }
 
         public void ChangeInterval(double time)
@@ -137,19 +141,19 @@ namespace SnakeGame.UI
 
         private void MainGameLoop(object sender, EventArgs e)
         {
-
             var inputs = InputsGetter.GetInputs(Snake, Apple);
-            var expected = OutputGetter.GetExpectedOutputs(inputs);
+            var outputs = OutputGetter.GetExpectedOutputs(inputs);
             var result = Network.ForwardPropagation(inputs.Values.ToList());
-            //network.updatewages();
+     
             var direct = DirectionHelper.GetDirect(result, Snake.MovementDirection);
             maxRepat++;
             UpdateMovementDirection(Snake, direct);
 
-            if (GameLoop())
+            if(GameLoop() && CounterTestingGame >= TestingGame)
             {
-
+                parent.StopGame();
             }
+           ;
         }
         public int maxRepat = 0;
         public bool GameLoop()
@@ -247,8 +251,23 @@ namespace SnakeGame.UI
             {
                 if (CollisionHelper.CollisionWithApple(Snake, Apple))
                     ProcessCollisionWithApple();
-                if (maxRepat > 200 || Snake.CollisionWithSelf() || CollisionHelper.CollisionWithWorldBounds(Snake, ElementSize))
+
+                bool timeCollison = maxRepat > 200;
+                bool snakeCollision = Snake.CollisionWithSelf();
+                bool wallCollision = CollisionHelper.CollisionWithWorldBounds(Snake, ElementSize);
+
+                if (timeCollison || snakeCollision || wallCollision)
                 {
+                    CounterTestingGame++;
+                    if (timeCollison)
+                        parent.ViewModel.CollisionsResult.Add(KindOfCollision.TimeCollision);
+                    else if (snakeCollision)
+                        parent.ViewModel.CollisionsResult.Add(KindOfCollision.SnakeCollision);
+                    else if (wallCollision)
+                        parent.ViewModel.CollisionsResult.Add(KindOfCollision.WallCollision);
+
+                    parent.ViewModel.Results.Add(Snake.Elements.Count());
+
                     maxRepat = 0;
                     parent.Deaths++;
                     parent.Best = Snake.Elements.Count();

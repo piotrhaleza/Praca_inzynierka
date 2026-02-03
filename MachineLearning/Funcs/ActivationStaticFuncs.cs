@@ -22,6 +22,11 @@ namespace MachineLearning.Funcs
     }
     public partial class ReLuActivationFunc
     {
+        public static ReLuActivationFunc Create(int a = 1, int b = 0)
+        {
+            return new ReLuActivationFunc(a, b);
+        }
+
         public static string OrginalPattern => "f(x) = ax + b (f(x) < 0 = 0)";
         public static string RealPattern => "f(x) = {a}*x + {b}";
         public static Dictionary<string, double> OrginalParameters => new Dictionary<string, double>() { { "a", 1 }, };

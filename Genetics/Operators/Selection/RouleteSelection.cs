@@ -13,37 +13,27 @@ namespace Genetic.Operators.Selection
     public class RouleteSelection: ISelectionOperator
     {
         
-        public void SelectPopulation(IPopulation population, IFunc func,int numberOfElite = 0)
+        public void SelectPopulation(IPopulation population, IFunc func)
         {
-            var probability = GetPropability(population.People, func);
-            var sum = probability.Values.Sum();
             List<IPerson> newPersons = new List<IPerson>();
             int id = 0;
 
-            if (numberOfElite > 0)
-            {
-                var orderProbability = probability.OrderByDescending(x => x.Value).ToList();
+           
+            var sum = population.People.Sum(x=>x.BestValue);
+            var probability = population.People.ToDictionary(x=> x.Id,x=>(double)(x.BestValue)/sum);
 
-                for (int k = 0; k < numberOfElite; k++)
-                {
-                    var newPerson = population.People.FirstOrDefault(x => x.Id == orderProbability[k].Key) as SnakeGenticPerson;
-                    newPersons.Add(new SnakeGenticPerson(id, newPerson));
-                    id++;
-                }
-
-            }
             Random random = new Random();
-            for (int k = numberOfElite; k < population.StartingCountPopulation; k++)
+            for (int k = 0; k < population.StartingCountPopulation; k++)
             {
-                int radomValue = random.Next(0,sum);
-                int floor = 0;
+                double radomValue = random.NextDouble();
+                double floor = 0;
 
                 foreach (var item in probability)
                 {
                     if (radomValue >= floor && radomValue < floor + item.Value)
                     {
                         var newPerson = population.People.FirstOrDefault(x => x.Id == item.Key) as SnakeGenticPerson;
-                        newPersons.Add(new SnakeGenticPerson(id, newPerson));
+                        newPersons.Add(SnakeGenticPerson.Copy(id, newPerson, population));
                         break;
                     }
                     else

@@ -10,11 +10,7 @@ namespace MachineLearingInterfaces
     public interface INeuron
     {
         int Id { get; set; }
-
         double Value { get; set; }
-        double DerivativeValue { get; set; }
-
-
         Dictionary<INeuron, IWage> Wages { get; }
     }
    

@@ -26,11 +26,11 @@ namespace MachineLearning.Networks
             int i = 1;
             foreach (var item in _template.Layers)
             {
-                list.Add(new Layer(item.NeuronList.Count(), i, new ReLuActivationFunc()));
+                list.Add(new Layer(item.NeuronList.Count(), i,  LineralActivationFunc.Create()));
                 i++;
             }
 
-            return new Network(list, _template.InitWages, _template.InitBiases,10);
+            return new Network(list, _template.InitWages, _template.InitBiases);
         }
     }
 }

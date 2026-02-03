@@ -10,10 +10,11 @@ namespace Genetic.Interfaces
     {
         int StartingCountPopulation { get; set; }
         IList<IPerson> People { get; set; }
-
         void CrossPopulation();
         void MutatePopulation();
-        void UpdatePopulation();
-        string GetTheBest();
+        void SelectPopulation();
+        string GetTheBestToString();
+        IPerson GetTheBest();
+        void Init(Func<double, double> func);
     }
 }

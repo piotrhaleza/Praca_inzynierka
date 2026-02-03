@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\KindOfLose.cs" />
     <Compile Include="Interfaces\Math\IFunction.cs" />
     <Compile Include="Interfaces\Operators\ICrossOperator.cs" />
     <Compile Include="Interfaces\Operators\IMutateOperator.cs" />

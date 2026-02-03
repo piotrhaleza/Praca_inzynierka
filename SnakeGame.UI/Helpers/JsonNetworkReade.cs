@@ -26,11 +26,11 @@ namespace SnakeGame.UI.Helpers
             int i = 1;
             foreach (var item in model.Layers)
             {
-                list.Add(new Layer(item, i, new ReLuActivationFunc()));
+                list.Add(new Layer(item, i,  LineralActivationFunc.Create()));
                 i++;
             }
 
-            var network = new Network(list, new InitZeroWages(), new InitZeroBiases(), 10);
+            var network = new Network(list, new InitZeroWages(), new InitZeroBiases());
             network.SetWages(model.Wages);
 
             return network;

@@ -28,6 +28,5 @@ namespace SnakeGame.UI.Enums
         ForwardToWall,
         RightToWall,
 
-        three,
     }
 }

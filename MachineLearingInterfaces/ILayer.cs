@@ -32,8 +32,6 @@ namespace MachineLearingInterfaces
 
         double Bias { get; set; }
 
-        double GradientBiasa { get; set; }
-
         void CalculateNextNeuron(INeuron neuron);
     }
 

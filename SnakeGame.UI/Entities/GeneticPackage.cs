@@ -8,7 +8,6 @@ namespace SnakeGame.UI.Entities
 {
     public class GeneticPackage
     {
-        public int CountOfPopulation { get; set; }
         public int CountOfPeopleInPopulation { get; set; }
         public double PropablityOfCross { get; set; }
         public double PropablityOfMutaion { get; set; }

@@ -19,7 +19,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace SnakeGame.UI.Learning
 {
-    public delegate void IterationEventHandler(int iteration, int best);
+    public delegate bool IterationEventHandler(int iteration, int best, int worst, double average, List<KindOfCollision> collisons);
 
     public class GeneticLearning
     {
@@ -66,9 +66,14 @@ namespace SnakeGame.UI.Learning
                     await Task.WhenAll(tasks.ToArray());
                     tasks.Clear();
 
-                    Population._select.SelectPopulation(Population, null, 0);
-                    var e = string.Join(",", Population.People.Select(x => x.BestValue).OrderBy(x => x));
-                    IterationEvent(i, Population.People.Select(x => x.BestValue).Max());
+                    Population.SelectPopulation();
+                    var bestResult = Population.People.Select(x => x.BestValue).Max();
+                    var worstResult = Population.People.Select(x => x.BestValue).Min();
+                    var averageResult = (double)(Population.People.Sum(x => x.BestValue)) / Population.People.Count();
+                    var collisions = Population.People.Select(x => x.KindOfLose.Convert()).ToList();
+                    if (!IterationEvent(i, bestResult, worstResult, averageResult, collisions))
+                        return null;
+
                 }
                 catch (Exception e)
                 {
@@ -76,7 +81,7 @@ namespace SnakeGame.UI.Learning
                 }
             }
 
-            var best = Population.People.FirstOrDefault(z => z.BestValue == Population.People.Max(x => x.BestValue));
+            var best = Population.GetTheBest();
             return best;
         }
         public Task<bool> BeginGameAsync(IPerson person)
@@ -101,7 +106,6 @@ namespace SnakeGame.UI.Learning
 
                 int countOfRepeat = 1;
 
-
                 bool again = true;
                 while (again)
                 {
@@ -125,37 +129,7 @@ namespace SnakeGame.UI.Learning
                     }
                     else if (resultCollision != KindOfCollision.NoCollision)
                     {
-                        //string resultText = "O------------O\n";
-
-                        //for (int i = -1; i < 11; i++)
-                        //{
-                        //    resultText += "|";
-                        //    for (int z = -1; z < 11; z++)
-                        //        if (apple.X == z && apple.Y == i)
-                        //            resultText += "A";
-                        //        else if (snake.Elements.Any(x => x.X == z && x.Y == i))
-                        //        {
-                        //            int number = 1;
-                        //            foreach (var item in snake.Elements)
-                        //            {
-                        //                if (item.X == z && item.Y == i)
-                        //                {
-                        //                    if (number < 10)
-                        //                        resultText += number;
-                        //                    else
-                        //                        resultText += "X";
-                        //                    break;
-                        //                }
-
-                        //                number++;
-                        //            }
-                        //        }
-                        //        else
-                        //            resultText += "-";
-
-                        //    resultText += "|\n";
-                        //}
-                        //resultText += "O------------O";
+                        person.KindOfLose = resultCollision.Convert();
                         countOfRepeat = 0;
                         again = false;
                         person.BestValue += snake.Elements.Count();

@@ -49,9 +49,9 @@ namespace snakeGame.UI.Learning
             result[SnakeInputs.RightToSnake] = GetSimpleSnake(result[SnakeInputs.RightToSnake]);
             result[SnakeInputs.RightForwardToSnake] = GetCroosSnake(result[SnakeInputs.RightForwardToSnake]);
 
-            result[SnakeInputs.LeftToWall] = result[SnakeInputs.LeftToApple] != 0 ? 0 : result[SnakeInputs.LeftToSnake] != 0 ? 0 : result[SnakeInputs.LeftToWall] == 1 ? 0.4 : result[SnakeInputs.LeftToWall] == 0 ? 1 : MinValue;
-            result[SnakeInputs.ForwardToWall] = result[SnakeInputs.ForwardToApple] != 0 ? 0 : result[SnakeInputs.ForwardToSnake] != 0 ? 0 :  result[SnakeInputs.ForwardToWall] == 1 ? 0.4 : result[SnakeInputs.ForwardToWall] == 0 ? 1 : MinValue;
-            result[SnakeInputs.RightToWall] = result[SnakeInputs.RightToApple] != 0 ? 0 : result[SnakeInputs.RightToSnake] != 0 ? 0 : result[SnakeInputs.RightToWall] == 1 ? 0.4 : result[SnakeInputs.RightToWall] == 0 ? 1 : MinValue;
+            result[SnakeInputs.LeftToWall] = result[SnakeInputs.LeftToApple] != MinValue ? 0 : result[SnakeInputs.LeftToSnake] != MinValue ? MinValue : result[SnakeInputs.LeftToWall] == 1 ? 0.4 : result[SnakeInputs.LeftToWall] == 0 ? 1 : MinValue;
+            result[SnakeInputs.ForwardToWall] = result[SnakeInputs.ForwardToApple] != MinValue ? 0 : result[SnakeInputs.ForwardToSnake] != MinValue ? MinValue :  result[SnakeInputs.ForwardToWall] == 1 ? 0.4 : result[SnakeInputs.ForwardToWall] == 0 ? 1 : MinValue;
+            result[SnakeInputs.RightToWall] = result[SnakeInputs.RightToApple] != MinValue ? 0 : result[SnakeInputs.RightToSnake] != MinValue ? MinValue : result[SnakeInputs.RightToWall] == 1 ? 0.4 : result[SnakeInputs.RightToWall] == 0 ? 1 : MinValue;
         }
         public static double GetSimpleSnake(double result)
         {
@@ -62,7 +62,7 @@ namespace snakeGame.UI.Learning
             else if (result == 2)
                 return 0.4;
 
-            return 0.1;
+            return 0.01;
         }
 
         public static double GetCroosSnake(double result)
@@ -77,7 +77,7 @@ namespace snakeGame.UI.Learning
                 return 1;
 
 
-            return 0.1;
+            return 0.01;
         }
 
         public static void SpecialColsions(Dictionary<SnakeInputs, double> result)

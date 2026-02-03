@@ -41,8 +41,9 @@ namespace SnakeGame.UI.Learning
 
         #endregion
 
-        public int NetworkLearn()
+        public int NetworkLearn(out KindOfCollision collision)
         {
+            collision = KindOfCollision.NoCollision;
 
             var snake = new Snake(ElementSize);
             snake.PositionFirstElement(5, 5, MovementDirection.Right);
@@ -60,6 +61,7 @@ namespace SnakeGame.UI.Learning
                 var expected = OutputGetter.GetExpectedOutputs(inputs);
                 var result = Network.TrainModel(inputs.Values.ToList(), expected);
                 Network.UpdateWages();
+                var a = Network.GetWages();
                 var oldDirect = snake.MovementDirection;
                 var direct = DirectionHelper.GetDirect(result, snake.MovementDirection);
 
@@ -77,6 +79,7 @@ namespace SnakeGame.UI.Learning
                 }
                 else if (resultCollision != KindOfCollision.NoCollision)
                 {
+                    collision = resultCollision;
                     countOfRepeat = 0;
                     again = false;
                 }

@@ -28,6 +28,9 @@ using System.Text.Json;
 using System.Windows.Documents;
 using System.Linq;
 using System.Configuration;
+using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.Defaults;
 
 namespace SnakeGame.UI
 {
@@ -63,9 +66,18 @@ namespace SnakeGame.UI
         }
         private void StopClick(object sender, RoutedEventArgs e)
         {
+            StopGame();
+        }
+        public void StopGame()
+        {
             StartBtn.IsEnabled = true;
             OptionsBtn.IsEnabled = true;
             TrainingBtn.IsEnabled = true;
+
+            this.DialogHost.IsOpen = true;
+            this.ViewModel.UpdateResultTestingSerries();
+
+            this.ResultGameHost.Visibility = Visibility.Visible;
 
             this._gameWorld.Stop();
         }
@@ -75,8 +87,8 @@ namespace SnakeGame.UI
 
             this.DialogHost.IsOpen = false;
             StartGameHost.Visibility = Visibility.Collapsed;
-            _gameWorld.InitlizeGenticsNetwork(filePath);
-            await _gameWorld.InitializeGame(ViewModel.SelectedDifficulty);
+            _gameWorld.InitlizeNetwork(filePath);
+            await _gameWorld.InitializeGame(ViewModel.SelectedDifficulty, ViewModel.IterationOfTestingGame);
 
             StartBtn.IsEnabled = false;
         }
@@ -85,6 +97,14 @@ namespace SnakeGame.UI
             this.DialogHost.IsOpen = false;
             StartGameHost.Visibility = Visibility.Collapsed;
             StartBtn.IsEnabled = true;
+        }
+        private void EndTestingClick(object sender, RoutedEventArgs e)
+        {
+            StartBtn.IsEnabled = true;
+
+            this.DialogHost.IsOpen = false;
+            this.ResultGameHost.Visibility = Visibility.Collapsed;
+
         }
 
         private void OptionsClick(object sender, RoutedEventArgs e)
@@ -109,6 +129,15 @@ namespace SnakeGame.UI
         private async void StopTrainingClick(object sender, RoutedEventArgs e)
         {
             this.DialogHost.IsOpen = false;
+            this.ViewModel.ContinueLearning = false;
+            StartBtn.IsEnabled = true;
+            OptionsBtn.IsEnabled = true;
+            TrainingGameHost.Visibility = Visibility.Collapsed;
+            StartBtn.IsEnabled = true;
+        }
+        private async void StopTrainingClick2(object sender, RoutedEventArgs e)
+        {
+            this.DialogHost.IsOpen = false;
             StartBtn.IsEnabled = true;
             OptionsBtn.IsEnabled = true;
             TrainingGameHost.Visibility = Visibility.Collapsed;
@@ -124,8 +153,10 @@ namespace SnakeGame.UI
         }
         private async void StartTraingRealClick(object sender, RoutedEventArgs e)
         {
+            var oldpath = ViewModel.PathToFile;
+
+            this.ViewModel.ContinueLearning = true;
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["PathToFile"].Value = ViewModel.PathToFile;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
 
@@ -133,7 +164,6 @@ namespace SnakeGame.UI
             var package = new GeneticPackage()
             {
                 CountOfPeopleInPopulation = ViewModel.CountOfPeopleInPoulation,
-                CountOfPopulation = ViewModel.CountOfPopulations,
                 LentghtOfChromoson = network.GetCountOfWages(),
                 PropablityOfCross = ((double)ViewModel.PropablityOfCross / 100),
                 PropablityOfMutaion = ((double)ViewModel.PropablityOfMutaion / 100),
@@ -146,21 +176,26 @@ namespace SnakeGame.UI
             else
                 wages = await ViewModel.StartGeneticTraning(InitialzeZeroNetwork(), package, ViewModel.CountOfRepeat);
 
-            NetworkToSaveViewModel model = new NetworkToSaveViewModel()
-            {
-                Layers = GetLayersToSave(),
-                Wages = wages.ToList()
-            };
-            string jsonString = JsonSerializer.Serialize(model);
-            File.WriteAllText(ViewModel.PathToFile, jsonString);
+            if (this.ViewModel.ContinueLearning == false)
+                return;
 
-            this.DialogHost.IsOpen = false;
+            if (wages != null)
+            {
+                NetworkToSaveViewModel model = new NetworkToSaveViewModel()
+                {
+                    Layers = GetLayersToSave(),
+                    Wages = wages.ToList()
+                };
+                string jsonString = JsonSerializer.Serialize(model);
+                File.WriteAllText(ViewModel.PathToFile, jsonString);
+            }
+            this.ViewModel.ContinueLearning = true;
             StartBtn.IsEnabled = true;
             OptionsBtn.IsEnabled = true;
-            TrainingGameHost.Visibility = Visibility.Hidden;
             StartBtn.IsEnabled = true;
+
         }
-        
+
         private List<int> GetLayersToSave()
         {
             var result = new List<int>();
@@ -283,11 +318,11 @@ namespace SnakeGame.UI
             int i = 1;
             foreach (var item in ViewModel.Layers)
             {
-                list.Add(new Layer(item.CountOfNeurons, i, new ReLuActivationFunc()));
+                list.Add(new Layer(item.CountOfNeurons, i, LineralActivationFunc.Create()));
                 i++;
             }
 
-            return new Network(list, new InitXawierWages(), new InitZeroBiases(), 10);
+            return new Network(list, new InitXawierWages(), new InitZeroBiases());
         }
         private Network InitialzeZeroNetwork()
         {
@@ -296,11 +331,11 @@ namespace SnakeGame.UI
             int i = 1;
             foreach (var item in ViewModel.Layers)
             {
-                list.Add(new Layer(item.CountOfNeurons, i, new ReLuActivationFunc()));
+                list.Add(new Layer(item.CountOfNeurons, i, LineralActivationFunc.Create()));
                 i++;
             }
 
-            return new Network(list, new InitZeroWages(), new InitZeroBiases(), 10);
+            return new Network(list, new InitZeroWages(), new InitZeroBiases());
         }
 
         #endregion

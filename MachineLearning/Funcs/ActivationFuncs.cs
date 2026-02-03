@@ -72,7 +72,7 @@ namespace MachineLearning.Funcs
 
         public override double Derivative(double input)
         {
-            if (input > 0)
+            if (input >= 0)
                 return Parameters["a"];
             else
                 return 0;

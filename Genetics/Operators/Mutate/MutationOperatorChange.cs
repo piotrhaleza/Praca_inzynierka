@@ -37,7 +37,7 @@ namespace Genetic.Operators.Mutate
                         else
                             resultList.Add(person.Value[i]);
             
-                    newPeople.Add(new SnakeGenticPerson(++maxId, person.Value.Count(), resultList));
+                    newPeople.Add(new SnakeGenticPerson(++maxId, resultList));
                 }
             }
 

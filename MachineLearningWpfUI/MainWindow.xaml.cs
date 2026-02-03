@@ -46,7 +46,7 @@ namespace MachineLearningWpfUI
 
             var list = new List<ILayer>() { inputs, hiddenfirsLayer, hiddenfirsLayer2, output };
 
-            var a= new Network(list, new InitXawierWages(), new InitZeroBiases(), 10);
+            var a= new Network(list, new InitXawierWages(), new InitZeroBiases());
             int thickness = 2;
 
             DataContext = Context = new ParameterViewModel(a,this);

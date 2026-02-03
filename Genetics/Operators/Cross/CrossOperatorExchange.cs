@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Genetic.Operators.Cross
 {
-    public class CrossOperatorExchangeWithReplace : ICrossOperator
+    public class CrossOperatorTwoPointCrossover : ICrossOperator
     {
         public void Cross(IPopulation population, double propability)
         {
@@ -23,26 +23,37 @@ namespace Genetic.Operators.Cross
 
                 if (cross)
                 {
-                    var crossingIndex = rand.Next((int)pair.first.Value.Count() - 2) + 1;
+                    var index1 = rand.Next((int)pair.first.Value.Count() - 1); 
+                    var index2 = rand.Next((int)pair.first.Value.Count() - 1); 
 
-                    population.People.Add(CrossingPerson(pair.first, pair.second, crossingIndex, population.People.Max(x=>x.Id)));
-                    population.People.Add( CrossingPerson(pair.second, pair.first, crossingIndex, population.People.Max(x => x.Id)));
+                    while (index1 == index2)
+                        index2 = rand.Next((int)pair.first.Value.Count() - 1);
+
+                    var indexes = new List<int>() { index1, index2 };
+                    var orderIndexes = indexes.OrderBy(x => x);
+
+                    population.People.Add(CrossingPerson(population, pair.first, pair.second, index1,index2, population.People.Max(x=>x.Id)));
+                    population.People.Add( CrossingPerson(population, pair.second, pair.first, index1, index2, population.People.Max(x => x.Id)));
 
                 }
             }
         }
 
-        public IPerson CrossingPerson(IPerson firstPerson, IPerson secondPerson, int crossingIndex,int maxId)
+        private IPerson CrossingPerson(IPopulation population, IPerson firstPerson, IPerson secondPerson, int index1, int index2, int maxId)
         {
+         
             double[] array = new double[firstPerson.Value.Count()];
 
-            for (int i = 0; i < crossingIndex; i++)
+            for (int i = 0; i < index1; i++)
                 array[i] = firstPerson.Value[i];
 
-            for (int i = crossingIndex; i < array.Length; i++)
+            for (int i = index1; i < index2; i++)
                 array[i] = secondPerson.Value[i];
 
-            return new SnakeGenticPerson(maxId +1, firstPerson.Value.Count(), array) { BestValue = firstPerson.BestValue };
+            for (int i = index2; i < array.Length; i++)
+                array[i] = firstPerson.Value[i];
+
+            return new SnakeGenticPerson(maxId + 1, array) { BestValue = firstPerson.BestValue };
         }
     }
 }

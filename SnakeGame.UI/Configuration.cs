@@ -18,6 +18,7 @@ namespace SnakeGame.UI
         public static List<int> Layers { get; }
       
         public static int IterationOfPropagation { get; }
+        public static int IterationOfTestingGame { get; }
         public static KindOfActivationFunc ActivationFunc { get; }
         public static int PopulationCount { get; }
         public static int CountPeopleInPopulation { get; }
@@ -50,6 +51,7 @@ namespace SnakeGame.UI
             PropablityOfCross = int.Parse(ConfigurationManager.AppSettings["PropablityOfCross"]);
             PropablityOfMutaion = int.Parse(ConfigurationManager.AppSettings["PropablityOfMutaion"]);
             IterationOfPropagation = int.Parse(ConfigurationManager.AppSettings["IterationOfPropagation"]);
+            IterationOfTestingGame = int.Parse(ConfigurationManager.AppSettings["IterationOfTestingGame"]);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace GeneticInterfaces.Interfaces.Operators
 {
     public interface ISelectionOperator
     {
-        void SelectPopulation(IPopulation population, IFunc func, int numberOfElite = 0);
+        void SelectPopulation(IPopulation population, IFunc func);
     }
 }

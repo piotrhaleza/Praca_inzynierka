@@ -1,4 +1,5 @@
-﻿using MachineLearingInterfaces;
+﻿using GeneticInterfaces.Interfaces;
+using MachineLearingInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Genetic.Interfaces
     {
         IList<double> Value { get; set; }
         int Id { get; set; }
-        double ToDouble();
-        double MinValue { get;}
-        double MaxValue { get;}
         int BestValue { get; set; }
+        void Init(Func<double, double> func, int lentghChromoson);
+        double ToDouble();
+        KindOfLose KindOfLose { get; set; }
     }
 }

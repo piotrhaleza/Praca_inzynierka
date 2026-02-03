@@ -25,14 +25,11 @@ namespace MachineLearning
         public IEnumerable<double> NeuronValues => NeuronList.Select(x=>x.Value);
         public ILayer NextLayer { get; set; }
         public ILayer PreviousLayer { get;  set; }
-
         public IEnumerable<Dictionary<INeuron,IWage>> Wages => NeuronList.Select(x => x.Wages);
-
         public int Id { get; set; }
         public int Size => NeuronList.Count();
         public double Bias { get; set; }
         public string Name { get; set; }
-        public double GradientBiasa { get; set; }
 
         #endregion
 
@@ -51,8 +48,8 @@ namespace MachineLearning
         {
             if(PreviousLayer == null) 
                 return;
-            neuron.DerivativeValue = PreviousLayer.NeuronList.Select(x => x.Value * x.Wages[neuron].Value).Sum() + Bias;
-            neuron.Value = PreviousLayer.ActivationFunc.Activate(neuron.DerivativeValue);
+            var value = PreviousLayer.NeuronList.Select(x => x.Value * x.Wages[neuron].Value).Sum() + Bias;
+            neuron.Value = PreviousLayer.ActivationFunc.Activate(value);
         }
         #endregion
 

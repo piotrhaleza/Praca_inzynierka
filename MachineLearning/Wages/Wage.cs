@@ -11,7 +11,6 @@ namespace MachineLearning.Wages
     public class Wage : IWage
     {
         public double Value { get; set; }
-        public double Gradient { get; set; }
         public double Error { get; set; }
     }
 }

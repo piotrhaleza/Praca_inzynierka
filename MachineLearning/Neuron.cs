@@ -19,7 +19,6 @@ namespace MachineLearning
         #region Public properties
         public int Id { get; set; }
         public double Value { get; set; }
-        public double DerivativeValue { get; set; }
         public Dictionary<INeuron, IWage> Wages => _wages;
         #endregion
 

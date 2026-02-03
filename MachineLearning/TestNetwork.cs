@@ -10,7 +10,7 @@ namespace MachineLearning
 {
     public class TestNetwork : Network
     {
-        public TestNetwork(IList<ILayer> layers, List<List<double>> wages, IList<double> bias) : base(layers, new InitRandomWages(), null, 0)
+        public TestNetwork(IList<ILayer> layers, List<List<double>> wages, IList<double> bias) : base(layers, new InitRandomWages(), null)
         {
             int i = 0;
 

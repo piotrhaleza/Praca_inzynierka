@@ -21,7 +21,7 @@ namespace Genetic.SimpleGenetics
         #endregion
 
         #region Readonly
-
+        public readonly int _lentghChromoson;
         public readonly double _propabiltyOfCross;
         public readonly double _propabilityOfMutation;
         public readonly IFunc _func;
@@ -32,7 +32,11 @@ namespace Genetic.SimpleGenetics
 
         #region Constructors
 
-        public SnakeGeneticPopulation(int countOfPeople, double propabiltyOfCross, double propabilityOfMutation,int lentghChromoson, IFunc func, ICrossOperator cross, IMutateOperator mutate,ISelectionOperator select)
+        public SnakeGeneticPopulation(int countOfPeople, double propabiltyOfCross, double propabilityOfMutation,int lentghChromoson, 
+            IFunc func,
+            ICrossOperator cross, 
+            IMutateOperator mutate,
+            ISelectionOperator select)
         {
             _propabiltyOfCross = propabiltyOfCross;
             _propabilityOfMutation = propabilityOfMutation;
@@ -40,11 +44,11 @@ namespace Genetic.SimpleGenetics
             _mutate = mutate;
             _select = select;
             _func = func;
+            _lentghChromoson = lentghChromoson;
             StartingCountPopulation = countOfPeople;
             People = new List<IPerson>();
-            Random a = new Random();
             for (int i = 0; i < countOfPeople; i++)
-                People.Add(new SnakeGenticPerson(i, lentghChromoson,rand:a));
+                People.Add(new SnakeGenticPerson(i));
         }
         #endregion
 
@@ -58,14 +62,24 @@ namespace Genetic.SimpleGenetics
         {
            _mutate.Mutate(this, _propabilityOfMutation);
         }
-        public void UpdatePopulation()
+        public void SelectPopulation()
         {
-            _select.SelectPopulation(this,_func);
+           _select.SelectPopulation(this,_func);
         }
-        public string GetTheBest()
+        public string GetTheBestToString()
         {
             var theBest = People.FirstOrDefault(x => _func.GetResult(x.ToDouble()) == People.Max(z => _func.GetResult(z.ToDouble())));
             return $"{_func.GetResult(theBest.ToDouble())} {theBest.ToDouble()}";
+        }
+        public IPerson GetTheBest()
+        {
+            var theBest = People.FirstOrDefault(x => x.BestValue == People.Max(z => z.BestValue));
+            return theBest;
+        }
+        public void Init(Func<double, double> func)
+        {
+            foreach(var item in People)
+                item.Init(func, _lentghChromoson);
         }
         #endregion
 
@@ -80,6 +94,8 @@ namespace Genetic.SimpleGenetics
             }
             return builder.ToString();
         }
+
+      
         #endregion
     }
 }
