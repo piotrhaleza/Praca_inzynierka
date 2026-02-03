@@ -1,8 +1,4 @@
-Stowrzenie apki na prace iżynierską. Apka ma dawać możliwość tworzenia sztucznych sieci neuronowych. Na to chwile ma ona umożliwiać zarówno uczenie na gotowych danych jak i podłaczenie do innych aplikaci
-
-Podstawowy widok:
-![image](https://github.com/piotrhaleza/NeuralNetworkBuilder/assets/110109614/ef919ffa-77d9-4ab8-bee4-22ecb9e154c6)
-
+Stowrzenie apki na prace inżynierską. Aplikacja umożliwia konfiguracje treningu sztucznych sieci neuronowych, ich trening oraz testowanie.
 
 
 Przykład działania gra Snake:
